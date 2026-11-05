@@ -6,7 +6,7 @@ const envInt = (key: string, fallback: number) => {
 
 export const site = {
   name: "WeddingWell",
-  city: env("NEXT_PUBLIC_LAUNCH_CITY", "Delhi NCR"),
+  city: env("NEXT_PUBLIC_LAUNCH_CITY", "Hyderabad"),
   businessName: env("NEXT_PUBLIC_BUSINESS_NAME", "WeddingWell (registered entity name to be added)"),
   address: env("NEXT_PUBLIC_BUSINESS_ADDRESS", "Registered address to be published before deposits open"),
   grievanceOfficer: env("NEXT_PUBLIC_GRIEVANCE_OFFICER", "Grievance Officer"),
@@ -25,20 +25,22 @@ export function siteUrl() {
 
 /** Launch micro-market. Edit once the city is confirmed. */
 export const areas = [
-  { value: "south-delhi", label: "South Delhi" },
-  { value: "vasant-vihar", label: "Vasant Vihar / Chanakyapuri" },
-  { value: "gk-defence-colony", label: "GK / Defence Colony / Jor Bagh" },
-  { value: "gurugram-golf-course", label: "Gurugram – Golf Course Road / DLF" },
-  { value: "noida", label: "Noida" },
-  { value: "other-ncr", label: "Elsewhere in Delhi NCR" },
-  { value: "outside", label: "Outside Delhi NCR" },
+  { value: "jubilee-hills", label: "Jubilee Hills" },
+  { value: "banjara-hills", label: "Banjara Hills" },
+  { value: "gachibowli-financial-district", label: "Gachibowli / Financial District" },
+  { value: "kokapet-narsingi", label: "Kokapet / Narsingi" },
+  { value: "madhapur-hitec-city", label: "Madhapur / HITEC City / Kondapur" },
+  { value: "secunderabad", label: "Secunderabad" },
+  { value: "other-hyderabad", label: "Elsewhere in Hyderabad" },
+  { value: "outside", label: "Outside Hyderabad" },
 ] as const;
 
 export const launchAreas = new Set<string>([
-  "south-delhi",
-  "vasant-vihar",
-  "gk-defence-colony",
-  "gurugram-golf-course",
+  "jubilee-hills",
+  "banjara-hills",
+  "gachibowli-financial-district",
+  "kokapet-narsingi",
+  "madhapur-hitec-city",
 ]);
 
 export const tierIds = ["silver", "gold", "platinum", "unsure"] as const;
