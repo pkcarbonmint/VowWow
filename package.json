@@ -10,6 +10,7 @@
     "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "groq-sdk": "^1.6.0",
     "jose": "^6.2.15",
     "next": "16.4.5",

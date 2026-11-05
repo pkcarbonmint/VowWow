@@ -49,7 +49,7 @@ export async function GET(req: Request) {
     AWS_SES_SMTP_PASSWORD: process.env.AWS_SES_SMTP_PASSWORD ? '✅ Set' : '❌ Missing',
     AWS_SES_SMTP_HOST: process.env.AWS_SES_SMTP_HOST ? '✅ Set' : '❌ Missing',
     AWS_SES_FROM_EMAIL: process.env.AWS_SES_FROM_EMAIL ? '✅ Set' : '❌ Missing',
-    GROQ_API_KEY: process.env.GROQ_API_KEY ? '✅ Set' : '❌ Missing',
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY ? '✅ Set' : '❌ Missing',
   };
 
   // Test 2: AWS SES email sending
@@ -97,14 +97,14 @@ export async function GET(req: Request) {
     console.error('[test-setup] ❌ AWS SES failed:', error);
   }
 
-  // Test 3: Groq AI
-  console.log('[test-setup] Testing Groq AI...');
+  // Test 3: Google Gemini AI
+  console.log('[test-setup] Testing Google Gemini AI...');
   try {
-    if (!process.env.GROQ_API_KEY) {
-      results.tests.groq = {
+    if (!process.env.GEMINI_API_KEY) {
+      results.tests.gemini = {
         status: '❌ Failed',
-        reason: 'GROQ_API_KEY not configured',
-        setup_url: 'https://console.groq.com/'
+        reason: 'GEMINI_API_KEY not configured',
+        setup_url: 'https://aistudio.google.com/app/apikey'
       };
     } else {
       const startTime = Date.now();
@@ -118,23 +118,23 @@ export async function GET(req: Request) {
       });
       const duration = Date.now() - startTime;
 
-      results.tests.groq = {
+      results.tests.gemini = {
         status: '✅ Success',
         response_time_ms: duration,
         response_preview: aiResponse.substring(0, 100) + (aiResponse.length > 100 ? '...' : ''),
         full_response: aiResponse,
-        model: 'llama-3.1-8b-instant',
+        model: 'gemini-1.5-flash',
       };
-      console.log('[test-setup] ✅ Groq AI responded in', duration, 'ms');
+      console.log('[test-setup] ✅ Gemini AI responded in', duration, 'ms');
     }
   } catch (error: any) {
-    results.tests.groq = {
+    results.tests.gemini = {
       status: '❌ Failed',
       error: error.message,
       details: error.toString(),
-      check: 'Verify GROQ_API_KEY is correct at https://console.groq.com/',
+      check: 'Verify GEMINI_API_KEY is correct at https://aistudio.google.com/app/apikey',
     };
-    console.error('[test-setup] ❌ Groq failed:', error);
+    console.error('[test-setup] ❌ Gemini failed:', error);
   }
 
   // Overall status
@@ -162,11 +162,11 @@ export async function GET(req: Request) {
     });
   }
   
-  if (!process.env.GROQ_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     results.next_steps.push({
-      service: 'Groq',
-      action: 'Get API key from https://console.groq.com/',
-      env_var: 'GROQ_API_KEY'
+      service: 'Google Gemini',
+      action: 'Get API key from https://aistudio.google.com/app/apikey',
+      env_var: 'GEMINI_API_KEY'
     });
   }
 
