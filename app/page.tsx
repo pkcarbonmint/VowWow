@@ -72,7 +72,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
             <p className="mt-3 text-sm text-muted">Founding members only. Refundable deposit.</p>
           </div>
           <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-sand">
-            <Image src="/hero.jpg" alt="A couple walking hand in hand down a sunny old-town street" fill priority sizes="(min-width: 768px) 45vw, 100vw" className="object-cover" />
+            <Image src="/hero-couple.jpg" alt="An Indian bride and groom embracing under a floral mandap" fill priority sizes="(min-width: 768px) 45vw, 100vw" className="object-cover object-[52%_50%]" />
           </div>
         </section>
 
