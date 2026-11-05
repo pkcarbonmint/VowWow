@@ -18,13 +18,13 @@ test("normalises Indian mobile numbers", () => {
 
 test("qualification needs 3+ months and a launch area", () => {
   assert.equal(monthsUntil("2027-02", now), 3);
-  assert.equal(isQualified({ weddingMonth: "2027-02", area: "south-delhi" }, now), true);
-  assert.equal(isQualified({ weddingMonth: "2027-01", area: "south-delhi" }, now), false);
+  assert.equal(isQualified({ weddingMonth: "2027-02", area: "jubilee-hills" }, now), true);
+  assert.equal(isQualified({ weddingMonth: "2027-01", area: "jubilee-hills" }, now), false);
   assert.equal(isQualified({ weddingMonth: "2027-06", area: "outside" }, now), false);
 });
 
 test("lead form requires consent and valid fields", () => {
-  const base = { name: "Asha", whatsapp: "9876543210", weddingMonth: "2027-05", area: "noida", tier: "gold", consent: true };
+  const base = { name: "Asha", whatsapp: "9876543210", weddingMonth: "2027-05", area: "secunderabad", tier: "gold", consent: true };
   assert.equal(parseLead(base, now).ok, true);
   const noConsent = parseLead({ ...base, consent: false }, now);
   assert.equal(noConsent.ok, false);
