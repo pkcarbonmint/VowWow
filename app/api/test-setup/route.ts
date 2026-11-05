@@ -123,7 +123,7 @@ export async function GET(req: Request) {
         response_time_ms: duration,
         response_preview: aiResponse.substring(0, 100) + (aiResponse.length > 100 ? '...' : ''),
         full_response: aiResponse,
-        model: 'gemini-1.5-flash',
+        model: 'gemini-pro',
       };
       console.log('[test-setup] ✅ Gemini AI responded in', duration, 'ms');
     }
