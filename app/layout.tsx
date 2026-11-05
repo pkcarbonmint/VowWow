@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
   title: "WeddingWell – Look and feel your best on the day",
   description,
-  openGraph: { title: "WeddingWell – launching soon", description, images: ["/hero.jpg"], locale: "en_IN", type: "website" },
+  openGraph: { title: "WeddingWell – launching soon", description, images: ["/hero-couple.jpg"], locale: "en_IN", type: "website" },
 };
 
 export const viewport: Viewport = { themeColor: "#f6f1ea", width: "device-width", initialScale: 1 };
