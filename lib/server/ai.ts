@@ -95,7 +95,7 @@ IMPORTANT RULES:
 
   try {
     const model = genAI.getGenerativeModel({ 
-      model: 'gemini-1.5-flash',
+      model: 'gemini-pro', // Stable, widely available model
       generationConfig: {
         temperature: 0.7,
         maxOutputTokens: 300,
