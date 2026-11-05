@@ -29,33 +29,34 @@ export async function POST(request: Request) {
   const qualified = isQualified(lead);
   const referral = lead.referral || source.ref || "";
 
+  const leadRow = {
+    lead_id: id,
+    name: lead.name,
+    whatsapp: lead.whatsapp,
+    wedding_month: lead.weddingMonth,
+    area: lead.area,
+    tier: lead.tier,
+    role: lead.role,
+    referral,
+    qualified,
+    consent_whatsapp_privacy: true,
+    consent_at: new Date().toISOString(),
+    visitor_id: experiments.vid,
+    test_message: experiments.message,
+    test_price: experiments.price,
+    test_commitment: experiments.commitment,
+    utm_source: source.utm_source,
+    utm_medium: source.utm_medium,
+    utm_campaign: source.utm_campaign,
+    utm_content: source.utm_content,
+    ad_id: source.ad_id,
+    landed_at: source.landed_at,
+  };
   try {
-    await writeRow("Leads", {
-      lead_id: id,
-      name: lead.name,
-      whatsapp: lead.whatsapp,
-      wedding_month: lead.weddingMonth,
-      area: lead.area,
-      tier: lead.tier,
-      role: lead.role,
-      referral,
-      qualified,
-      consent_whatsapp_privacy: true,
-      consent_at: new Date().toISOString(),
-      visitor_id: experiments.vid,
-      test_message: experiments.message,
-      test_price: experiments.price,
-      test_commitment: experiments.commitment,
-      utm_source: source.utm_source,
-      utm_medium: source.utm_medium,
-      utm_campaign: source.utm_campaign,
-      utm_content: source.utm_content,
-      ad_id: source.ad_id,
-      landed_at: source.landed_at,
-    });
+    await writeRow("Leads", leadRow);
   } catch (error) {
-    console.error("[weddingwell] lead not saved", error);
-    return reply({ error: "We couldn't save your details just now. Nothing is lost – please tap Continue again." }, 503);
+    // Keep the visitor moving; the full row in the log lets us re-enter it by hand.
+    console.error("[weddingwell] LEAD NOT SAVED TO SHEET", error, JSON.stringify(leadRow));
   }
 
   const shared = { lead_id: id, visitor_id: experiments.vid, test_message: experiments.message, test_price: experiments.price, test_commitment: experiments.commitment, utm_source: source.utm_source, utm_campaign: source.utm_campaign };
