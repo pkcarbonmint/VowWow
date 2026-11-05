@@ -145,9 +145,10 @@ http://localhost:3000/api/test-setup?secret=test123&email=your@email.com
 This will tell you exactly what's missing or misconfigured.
 
 ### "OTP not received"
-- Run test route to check ZeptoMail config
-- Check terminal logs (it prints OTP if ZeptoMail not configured)
-- Check ZeptoMail dashboard → Logs
+- Run test route to check AWS SES config
+- Check terminal logs (it prints OTP if AWS SES not configured)
+- **In Sandbox mode:** Can only send to verified email
+- Check AWS SES Console → Account dashboard → Sending statistics
 
 ### "AI error"
 - Run test route to check Groq config
