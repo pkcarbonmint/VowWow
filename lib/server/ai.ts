@@ -100,7 +100,7 @@ IMPORTANT RULES:
   try {
     const completion = await groq.chat.completions.create({
       messages,
-      model: 'llama-3.1-8b-instant', // Stable, fast, currently active
+      model: 'gemma2-9b-it', // Currently available model
       temperature: 0.7,
       max_tokens: 300,
       top_p: 1,
