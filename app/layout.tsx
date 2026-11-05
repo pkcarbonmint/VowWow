@@ -12,7 +12,7 @@ const description =
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl()),
-  title: "WeddingWell – Look and feel your best on the day",
+  title: "WeddingWell – Be well. Look well. Wed well.",
   description,
   openGraph: { title: "WeddingWell – launching soon", description, images: ["/hero-couple.jpg"], locale: "en_IN", type: "website" },
 };

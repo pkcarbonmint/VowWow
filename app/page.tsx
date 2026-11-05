@@ -59,17 +59,17 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
         <section className="mx-auto grid max-w-6xl gap-8 px-5 pt-8 pb-14 md:grid-cols-[1.1fr_0.9fr] md:items-center md:pt-16 md:pb-20">
           <div>
             <p className="text-xs font-semibold tracking-[0.2em] text-sage uppercase">Launching soon · {site.city}</p>
-            <h1 className="mt-4 font-serif text-[2.6rem] leading-[1.05] font-medium sm:text-6xl">
-              Start 4–6 months before your wedding.{" "}
-              <em className="text-sage">{headline[experiments.message]}</em>
+            <h1 className="mt-4 font-serif text-[2.75rem] leading-[1.05] font-medium sm:text-6xl">
+              Be well. Look well. <em className="block text-sage">Wed well.</em>
             </h1>
-            <p className="mt-5 max-w-md text-lg leading-relaxed text-muted">
-              A 4–6 month health and glow program for engaged couples, being built with licensed doctors. Health first – the glow is the visible result.
+            <p className="mt-5 text-xl font-semibold text-ink">{headline[experiments.message]}</p>
+            <p className="mt-3 max-w-md text-lg leading-relaxed text-muted">
+              A doctor-guided health and glow program for engaged couples. Begin 4–6 months before the wedding, so the glow on the day comes from real health, not last-minute fixes.
             </p>
             <a href="#reserve" className="mt-7 inline-flex min-h-13 items-center rounded-full bg-sage px-8 text-base font-semibold text-white hover:bg-sage-dark">
               Reserve your spot
             </a>
-            <p className="mt-3 text-sm text-muted">Founding members only. Refundable deposit.</p>
+            <p className="mt-3 text-sm text-muted">Founding members only · Refundable {inr(site.depositInr)} deposit</p>
           </div>
           <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-sand">
             <Image src="/hero-couple.jpg" alt="An Indian bride and groom embracing under a floral mandap" fill priority sizes="(min-width: 768px) 45vw, 100vw" className="object-cover object-[52%_50%]" />
