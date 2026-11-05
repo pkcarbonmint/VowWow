@@ -211,11 +211,25 @@ Add an `email` column to your **Leads** tab in Google Sheets (after `name` colum
 
 No other changes needed to your Google Apps Script.
 
-### 6. Test Locally
+### 6. Test Setup
+
+**Quick verification (recommended):**
 
 ```bash
 npm run dev
 ```
+
+Visit test route:
+```
+http://localhost:3000/api/test-setup?secret=test123&email=your@email.com
+```
+
+This checks:
+- ✅ Environment variables set
+- ✅ ZeptoMail can send emails
+- ✅ Groq AI responds correctly
+
+**Full UI test:**
 
 Visit http://localhost:3000
 
@@ -379,17 +393,37 @@ Scale to 10,000 users before paying anything!
 
 ## Troubleshooting
 
+### Use the Test Route First!
+
+Before debugging, run the test route to identify the issue:
+
+**Development:**
+```
+http://localhost:3000/api/test-setup?secret=test123&email=test@example.com
+```
+
+**Production:**
+```
+https://yourdomain.com/api/test-setup?secret=YOUR_SECRET_TEST_KEY&email=test@example.com
+```
+
+Set `SECRET_TEST_KEY` in environment variables for production access.
+
+The test route will show you exactly what's missing or misconfigured.
+
 ### "Failed to send verification code"
 
-1. Check `ZEPTOMAIL_TOKEN` is set correctly
-2. Check bounce address is correct
-3. Check ZeptoMail dashboard for delivery logs
+1. Run test route with `&email=your@email.com` parameter
+2. Check `ZEPTOMAIL_TOKEN` is set correctly
+3. Check bounce address is correct
+4. Check ZeptoMail dashboard for delivery logs
 
 ### "AI service temporarily unavailable"
 
-1. Check `GROQ_API_KEY` is set correctly
-2. Check Groq dashboard for rate limit status
-3. Try switching to 8B model (faster, lower usage)
+1. Run test route to check Groq status
+2. Check `GROQ_API_KEY` is set correctly
+3. Check Groq dashboard for rate limit status
+4. Try switching to 8B model (faster, lower usage)
 
 ### "Session not found" / Users logged out
 

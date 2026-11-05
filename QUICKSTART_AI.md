@@ -41,11 +41,46 @@ Open your Google Sheet → **Leads** tab → Add column after `name`:
 
 That's it! Your existing Google Apps Script doesn't need changes.
 
-## Step 4: Test (2 minutes)
+## Step 4: Test Setup (2 minutes)
+
+### Option A: Quick Setup Test (Recommended)
+
+Visit the test route to verify everything is configured:
 
 ```bash
 npm run dev
 ```
+
+Then visit:
+```
+http://localhost:3000/api/test-setup?secret=test123&email=your@email.com
+```
+
+You'll see:
+```json
+{
+  "overall": "✅ All systems operational",
+  "tests": {
+    "env_vars": {
+      "TOKEN_SECRET": "✅ Set",
+      "ZEPTOMAIL_TOKEN": "✅ Set",
+      "GROQ_API_KEY": "✅ Set"
+    },
+    "zeptomail": {
+      "status": "✅ Success",
+      "email_sent_to": "your@email.com",
+      "note": "Check your email for OTP: 123456"
+    },
+    "groq": {
+      "status": "✅ Success",
+      "response_time_ms": 847,
+      "response_preview": "Use blotting papers throughout the day..."
+    }
+  }
+}
+```
+
+### Option B: Full UI Test
 
 1. Go to http://localhost:3000
 2. Scroll to **"Get personalized advice"** section
@@ -88,11 +123,21 @@ Done! 🎉
 
 ## Troubleshooting
 
+### Use the Test Route First!
+
+```
+http://localhost:3000/api/test-setup?secret=test123&email=your@email.com
+```
+
+This will tell you exactly what's missing or misconfigured.
+
 ### "OTP not received"
+- Run test route to check ZeptoMail config
 - Check terminal logs (it prints OTP if ZeptoMail not configured)
 - Check ZeptoMail dashboard → Logs
 
 ### "AI error"
+- Run test route to check Groq config
 - Check `GROQ_API_KEY` is correct
 - Visit https://console.groq.com/ → Check rate limits
 
