@@ -45,7 +45,24 @@ export function AiChat() {
 
   // Check for existing session on mount
   useEffect(() => {
-    checkSession();
+    // Bypass auth for now - go straight to context collection or chat
+    const savedContext = localStorage.getItem('ww_ai_context');
+    if (savedContext) {
+      try {
+        const parsed = JSON.parse(savedContext);
+        setContext(parsed);
+        if (parsed.name && parsed.weddingMonth) {
+          setStage('chat');
+          addMessage('assistant', `Hi ${parsed.name?.split(' ')[0]}! 👋 ${getWelcomeMessageSimple(parsed)}`);
+        } else {
+          setStage('context');
+        }
+      } catch {
+        setStage('context');
+      }
+    } else {
+      setStage('context');
+    }
   }, []);
 
   // Auto-scroll messages
@@ -90,6 +107,23 @@ export function AiChat() {
     
     if (user.questionsToday > 0) {
       parts.push(`${user.questionsRemaining}/${user.dailyLimit} questions remaining today.`);
+    }
+    
+    if (parts.length) {
+      return parts.join(' ') + '\n\nWhat would you like to know about health or skincare?';
+    }
+    
+    return 'What would you like to know about health or skincare?';
+  }
+
+  function getWelcomeMessageSimple(ctx: typeof context) {
+    const parts = [];
+    
+    if (ctx.weddingMonth) {
+      const days = calculateDaysUntil(ctx.weddingMonth);
+      if (days > 0) {
+        parts.push(`${days} days until ${formatMonth(ctx.weddingMonth)}!`);
+      }
     }
     
     if (parts.length) {
@@ -189,7 +223,11 @@ export function AiChat() {
       return;
     }
 
-    await checkSession();
+    // Save to localStorage
+    localStorage.setItem('ww_ai_context', JSON.stringify(context));
+    
+    setStage('chat');
+    addMessage('assistant', `Hi ${context.name?.split(' ')[0]}! 👋 ${getWelcomeMessageSimple(context)}`);
   }
 
   async function sendMessage() {
@@ -216,21 +254,18 @@ export function AiChat() {
     setInput('');
 
     try {
-      const res = await fetch('/api/chat', {
+      // Send with context from localStorage (no auth required)
+      const res = await fetch('/api/chat-public', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           message: trimmedInput,
           conversationHistory: messages,
+          context: context, // Send context directly
         }),
       });
 
       const data = await res.json();
-
-      if (res.status === 429 && data.limitReached) {
-        addMessage('assistant', `You've used all ${data.dailyLimit || 10} questions today. Your limit resets at midnight IST.\n\nWant unlimited AI advice plus doctor consults and personalized plans? Check out our Gold package (₹45,000).`);
-        return;
-      }
 
       if (!res.ok) {
         setError(data.error || 'Failed to get response');
@@ -239,18 +274,6 @@ export function AiChat() {
 
       // Add AI response
       addMessage('assistant', data.response);
-      
-      // Update session info
-      if (session) {
-        setSession({
-          ...session,
-          user: session.user ? {
-            ...session.user,
-            questionsToday: data.questionsToday,
-            questionsRemaining: data.questionsRemaining,
-          } : undefined,
-        });
-      }
     } catch {
       setError('Network error. Please try again.');
     } finally {
@@ -264,8 +287,9 @@ export function AiChat() {
 
   const fieldClass = "block w-full min-h-12 rounded-2xl border border-line bg-white px-4 text-base text-ink placeholder:text-muted/70 focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/25";
 
-  // Email input stage
-  if (stage === 'email') {
+  // Skip email/OTP stages - go straight to context collection
+  // Email input stage (disabled)
+  if (false && stage === 'email') {
     return (
       <div className="rounded-3xl bg-paper border border-line p-6 md:p-8">
         <h3 className="font-serif text-2xl font-medium">Chat with AI Planner</h3>
@@ -311,8 +335,8 @@ export function AiChat() {
     );
   }
 
-  // OTP verification stage
-  if (stage === 'otp') {
+  // OTP verification stage (disabled)
+  if (false && stage === 'otp') {
     return (
       <div className="rounded-3xl bg-paper border border-line p-6 md:p-8">
         <h3 className="font-serif text-2xl font-medium">Enter verification code</h3>
@@ -365,7 +389,7 @@ export function AiChat() {
       <div className="rounded-3xl bg-paper border border-line p-6 md:p-8">
         <h3 className="font-serif text-2xl font-medium">Tell us a bit about yourself</h3>
         <p className="mt-2 text-sm text-muted">
-          This helps us give you personalized advice
+          This helps us give you personalized wedding advice
         </p>
 
         {error && (
@@ -439,17 +463,13 @@ export function AiChat() {
       <div className="flex items-center justify-between border-b border-line p-4 bg-sage-soft">
         <div>
           <h3 className="font-serif text-lg font-semibold">AI Glow Planner</h3>
-          {session?.user && (
-            <p className="text-xs text-muted">
-              {session.user.questionsRemaining}/{session.user.dailyLimit} questions left today
-            </p>
-          )}
+          <p className="text-xs text-muted">Free advice for your wedding</p>
         </div>
         <div className="text-xs text-muted text-right">
-          {session?.user?.name && <div>{session.user.name.split(' ')[0]}</div>}
-          {session?.user?.weddingMonth && (
+          {context?.name && <div>{context.name.split(' ')[0]}</div>}
+          {context?.weddingMonth && (
             <div className="text-sage-dark font-semibold">
-              {calculateDaysUntil(session.user.weddingMonth)} days to go
+              {calculateDaysUntil(context.weddingMonth)} days to go
             </div>
           )}
         </div>
