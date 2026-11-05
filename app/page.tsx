@@ -56,11 +56,11 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
       <Header />
       <PageTracker />
       <main id="main">
-        <section className="mx-auto grid max-w-6xl gap-8 px-5 pt-8 pb-14 md:grid-cols-[1.1fr_0.9fr] md:items-center md:pt-16 md:pb-20">
+        <section className="mx-auto grid max-w-6xl gap-8 px-5 pt-8 pb-14 md:grid-cols-[1.1fr_0.9fr] lg:grid-cols-[1.35fr_0.85fr] md:items-center md:pt-16 md:pb-20">
           <div>
             <p className="text-xs font-semibold tracking-[0.2em] text-sage uppercase">Launching soon · {site.city}</p>
-            <h1 className="mt-4 font-serif text-[2.75rem] leading-[1.05] font-medium sm:text-6xl">
-              Be well. Look well. <em className="block text-sage">Wed well.</em>
+            <h1 className="mt-4 font-serif text-[2.5rem] leading-[1.08] font-medium sm:text-5xl lg:whitespace-nowrap lg:text-[3.4rem]">
+              Be well. Look well. <em className="text-sage">Wed well.</em>
             </h1>
             <p className="mt-5 text-xl font-semibold text-ink">{headline[experiments.message]}</p>
             <p className="mt-3 max-w-md text-lg leading-relaxed text-muted">
