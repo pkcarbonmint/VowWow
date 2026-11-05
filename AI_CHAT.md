@@ -329,7 +329,7 @@ In `/lib/server/ai.ts`:
 ```typescript
 model: 'llama-3.1-8b-instant' // Faster, slightly lower quality
 // or
-model: 'llama-3.1-70b-versatile' // Current (best quality, still fast)
+model: 'llama-3.3-70b-versatile' // Current (best quality, still fast)
 // or
 model: 'mixtral-8x7b-32768' // Alternative
 ```

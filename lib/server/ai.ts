@@ -98,7 +98,7 @@ IMPORTANT RULES:
   try {
     const completion = await groq.chat.completions.create({
       messages,
-      model: 'llama-3.1-70b-versatile',
+      model: 'llama-3.3-70b-versatile', // Updated to supported model
       temperature: 0.7,
       max_tokens: 300,
       top_p: 1,

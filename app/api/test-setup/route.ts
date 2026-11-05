@@ -115,7 +115,7 @@ export async function GET(req: Request) {
         response_time_ms: duration,
         response_preview: aiResponse.substring(0, 100) + (aiResponse.length > 100 ? '...' : ''),
         full_response: aiResponse,
-        model: 'llama-3.1-70b-versatile',
+        model: 'llama-3.3-70b-versatile',
       };
       console.log('[test-setup] ✅ Groq AI responded in', duration, 'ms');
     }
