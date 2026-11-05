@@ -45,22 +45,30 @@ export async function GET(req: Request) {
   console.log('[test-setup] Checking environment variables...');
   results.tests.env_vars = {
     TOKEN_SECRET: process.env.TOKEN_SECRET ? '✅ Set' : '❌ Missing',
-    ZEPTOMAIL_TOKEN: process.env.ZEPTOMAIL_TOKEN ? '✅ Set' : '❌ Missing',
-    ZEPTOMAIL_BOUNCE_ADDRESS: process.env.ZEPTOMAIL_BOUNCE_ADDRESS || '⚠️ Not set (will use default)',
+    AWS_SES_SMTP_USERNAME: process.env.AWS_SES_SMTP_USERNAME ? '✅ Set' : '❌ Missing',
+    AWS_SES_SMTP_PASSWORD: process.env.AWS_SES_SMTP_PASSWORD ? '✅ Set' : '❌ Missing',
+    AWS_SES_SMTP_HOST: process.env.AWS_SES_SMTP_HOST ? '✅ Set' : '❌ Missing',
+    AWS_SES_FROM_EMAIL: process.env.AWS_SES_FROM_EMAIL ? '✅ Set' : '❌ Missing',
     GROQ_API_KEY: process.env.GROQ_API_KEY ? '✅ Set' : '❌ Missing',
   };
 
-  // Test 2: ZeptoMail email sending
-  console.log('[test-setup] Testing ZeptoMail...');
+  // Test 2: AWS SES email sending
+  console.log('[test-setup] Testing AWS SES...');
   try {
-    if (!process.env.ZEPTOMAIL_TOKEN) {
-      results.tests.zeptomail = {
+    if (!process.env.AWS_SES_SMTP_USERNAME || !process.env.AWS_SES_SMTP_PASSWORD) {
+      results.tests.aws_ses = {
         status: '⚠️ Skipped',
-        reason: 'ZEPTOMAIL_TOKEN not configured',
-        note: 'In dev mode, OTP will be logged to console instead'
+        reason: 'AWS SES not configured',
+        note: 'In dev mode, OTP will be logged to console instead',
+        missing: {
+          username: !process.env.AWS_SES_SMTP_USERNAME,
+          password: !process.env.AWS_SES_SMTP_PASSWORD,
+          host: !process.env.AWS_SES_SMTP_HOST,
+          from: !process.env.AWS_SES_FROM_EMAIL,
+        }
       };
     } else if (!testEmail) {
-      results.tests.zeptomail = {
+      results.tests.aws_ses = {
         status: '⚠️ Skipped',
         reason: 'No email provided',
         note: 'Add &email=your@email.com to URL to test email sending'
@@ -69,7 +77,7 @@ export async function GET(req: Request) {
       const testOTP = '123456';
       const emailResult = await sendEmailOTP(testEmail, testOTP);
       
-      results.tests.zeptomail = {
+      results.tests.aws_ses = {
         status: '✅ Success',
         email_sent_to: testEmail,
         test_otp: testOTP,
@@ -78,15 +86,15 @@ export async function GET(req: Request) {
           ? 'Email sending skipped (dev mode), check console logs' 
           : 'Check your email for OTP: 123456'
       };
-      console.log('[test-setup] ✅ ZeptoMail test email sent');
+      console.log('[test-setup] ✅ AWS SES test email sent');
     }
   } catch (error: any) {
-    results.tests.zeptomail = {
+    results.tests.aws_ses = {
       status: '❌ Failed',
       error: error.message,
       details: error.toString(),
     };
-    console.error('[test-setup] ❌ ZeptoMail failed:', error);
+    console.error('[test-setup] ❌ AWS SES failed:', error);
   }
 
   // Test 3: Groq AI
@@ -115,7 +123,7 @@ export async function GET(req: Request) {
         response_time_ms: duration,
         response_preview: aiResponse.substring(0, 100) + (aiResponse.length > 100 ? '...' : ''),
         full_response: aiResponse,
-        model: 'llama-3.1-70b-versatile',
+        model: 'llama-3.3-70b-versatile',
       };
       console.log('[test-setup] ✅ Groq AI responded in', duration, 'ms');
     }
@@ -146,11 +154,11 @@ export async function GET(req: Request) {
   // Instructions
   results.next_steps = [];
   
-  if (!process.env.ZEPTOMAIL_TOKEN) {
+  if (!process.env.AWS_SES_SMTP_USERNAME || !process.env.AWS_SES_SMTP_PASSWORD) {
     results.next_steps.push({
-      service: 'ZeptoMail',
-      action: 'Get token from https://www.zoho.com/zeptomail/',
-      env_var: 'ZEPTOMAIL_TOKEN'
+      service: 'AWS SES',
+      action: 'Set up SMTP credentials from AWS SES Console',
+      env_vars: ['AWS_SES_SMTP_USERNAME', 'AWS_SES_SMTP_PASSWORD', 'AWS_SES_SMTP_HOST', 'AWS_SES_FROM_EMAIL']
     });
   }
   
