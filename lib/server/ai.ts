@@ -46,6 +46,8 @@ export async function getAIResponse(context: AIContext): Promise<string> {
   if (!process.env.GROQ_API_KEY) {
     throw new Error('GROQ_API_KEY not configured');
   }
+  
+  // Force fresh deployment
 
   const daysUntil = context.daysUntil ?? calculateDaysUntil(context.weddingMonth);
   const phase = context.phase ?? getPhase(daysUntil);
