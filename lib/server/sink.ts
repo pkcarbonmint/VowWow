@@ -20,7 +20,17 @@ export async function writeRow(tab: SheetTab, row: Row): Promise<void> {
       redirect: "follow",
       signal: AbortSignal.timeout(10_000),
     });
-    if (!res.ok) throw new Error(`Sheet webhook responded ${res.status}`);
+    // Apps Script answers 200 even when it rejects a request, so the JSON body is the real result.
+    const text = await res.text();
+    let reply: { ok?: boolean; error?: string } = {};
+    try {
+      reply = JSON.parse(text);
+    } catch {
+      throw new Error(`Sheet webhook returned non-JSON (HTTP ${res.status}). Check the web app's "Who has access" is "Anyone". Starts: ${text.slice(0, 80)}`);
+    }
+    if (!res.ok || reply.ok !== true) {
+      throw new Error(`Sheet webhook rejected the row (HTTP ${res.status}): ${reply.error ?? "unknown error"}`);
+    }
     return;
   }
 
