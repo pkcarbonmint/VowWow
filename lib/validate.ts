@@ -19,6 +19,7 @@ export function monthsUntil(weddingMonth: string, now = new Date()): number {
 
 export type LeadInput = {
   name: string;
+  email: string;
   whatsapp: string;
   weddingMonth: string;
   area: string;
@@ -34,6 +35,12 @@ export function parseLead(body: Record<string, unknown>, now = new Date()): Pars
 
   const name = str("name");
   if (name.length < 2 || name.length > 80) return { ok: false, field: "name", error: "Please enter your name." };
+
+  const email = str("email").toLowerCase();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email)) {
+    return { ok: false, field: "email", error: "Please enter a valid email address." };
+  }
 
   const whatsapp = normalizeIndianMobile(str("whatsapp"));
   if (!whatsapp) return { ok: false, field: "whatsapp", error: "Please enter a valid 10-digit Indian mobile number." };
@@ -60,7 +67,7 @@ export function parseLead(body: Record<string, unknown>, now = new Date()): Pars
     return { ok: false, field: "consent", error: "Please tick the box so we can contact you on WhatsApp." };
   }
 
-  return { ok: true, lead: { name, whatsapp, weddingMonth, area, tier, role, referral: str("referral").slice(0, 40) } };
+  return { ok: true, lead: { name, email, whatsapp, weddingMonth, area, tier, role, referral: str("referral").slice(0, 40) } };
 }
 
 /** Qualified = wedding 3+ months away, inside the launch area, WhatsApp consent given. */

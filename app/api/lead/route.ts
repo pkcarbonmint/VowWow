@@ -32,6 +32,7 @@ export async function POST(request: Request) {
   const leadRow = {
     lead_id: id,
     name: lead.name,
+    email: lead.email,
     whatsapp: lead.whatsapp,
     wedding_month: lead.weddingMonth,
     area: lead.area,

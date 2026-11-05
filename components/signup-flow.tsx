@@ -11,6 +11,7 @@ type Done = { kind: "deposit" | "call" | "waitlist"; detail?: string; pendingLin
 
 type Draft = {
   name: string;
+  email: string;
   whatsapp: string;
   weddingMonth: string;
   area: string;
@@ -22,7 +23,7 @@ type Draft = {
 
 const DRAFT_KEY = "ww:draft";
 const FLOW_KEY = "ww:flow";
-const empty: Draft = { name: "", whatsapp: "", weddingMonth: "", area: "", tier: "", role: "", referral: "", consent: false };
+const empty: Draft = { name: "", email: "", whatsapp: "", weddingMonth: "", area: "", tier: "", role: "", referral: "", consent: false };
 
 const tierOptions = [
   { value: "silver", label: "Silver" },
@@ -312,6 +313,10 @@ export function SignupFlow(props: {
       <div>
         <label htmlFor="f-name" className="text-sm font-semibold">Your name</label>
         <input id="f-name" name="name" autoComplete="name" required value={draft.name} onChange={(e) => update("name", e.target.value)} aria-invalid={invalid("name")} aria-describedby={describedBy("name")} className={fieldClass} />
+      </div>
+      <div>
+        <label htmlFor="f-email" className="text-sm font-semibold">Email address</label>
+        <input id="f-email" name="email" type="email" autoComplete="email" required value={draft.email} onChange={(e) => update("email", e.target.value)} aria-invalid={invalid("email")} aria-describedby={describedBy("email")} placeholder="you@example.com" className={fieldClass} />
       </div>
       <div>
         <label htmlFor="f-whatsapp" className="text-sm font-semibold">WhatsApp number</label>
