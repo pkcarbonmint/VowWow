@@ -2,7 +2,7 @@
 
 ## Overview
 
-An AI-powered wedding glow planner that provides personalized health, skincare, and wellness advice to engaged couples. The chat uses email-based authentication, rate limiting, and contextual AI responses powered by Groq's Llama 3.1 model.
+An AI-powered wedding glow planner that provides personalized health, skincare, and wellness advice to engaged couples. The chat uses email-based authentication, rate limiting, and contextual AI responses powered by Groq's Llama 3.3 model.
 
 ## Features
 
