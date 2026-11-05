@@ -127,7 +127,7 @@ export function SignupFlow(props: {
       });
       const json = (await res.json().catch(() => ({}))) as { token?: string; error?: string; field?: string };
       if (!res.ok || !json.token) {
-        setError({ message: json.error ?? "Something went wrong. Please try again.", field: json.field });
+        setError({ message: json.error ?? "We couldn't complete that just now. Your answers are saved here – please try again in a moment.", field: json.field });
         if (json.field) document.getElementById(`f-${json.field}`)?.focus();
         return;
       }
@@ -163,7 +163,7 @@ export function SignupFlow(props: {
         setStage("interest");
       }
       if (!res.ok) {
-        setError({ message: json.error ?? "Something went wrong. Please try again." });
+        setError({ message: json.error ?? "We couldn't complete that just now. Your answers are saved here – please try again in a moment." });
         return;
       }
       const result: Done =

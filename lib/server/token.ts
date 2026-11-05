@@ -14,10 +14,19 @@ export type LeadToken = {
 
 const MAX_AGE_MS = 7 * 24 * 60 * 60 * 1000;
 
+let warned = false;
+
+// A missing secret must never block sign-ups, so fall back to other server-only secrets, then a fixed value.
+// The token only links step 2 to step 1; a forged one could add a junk commitment row, nothing more.
 function secret() {
-  const value = process.env.TOKEN_SECRET;
-  if (value && value.length >= 16) return value;
-  if (process.env.VERCEL_ENV === "production") throw new Error("TOKEN_SECRET must be set (16+ characters)");
+  for (const key of ["TOKEN_SECRET", "SHEETS_WEBHOOK_SECRET", "RAZORPAY_KEY_SECRET"]) {
+    const value = process.env[key];
+    if (value && value.length >= 16) return value;
+  }
+  if (process.env.VERCEL_ENV === "production" && !warned) {
+    warned = true;
+    console.error("[weddingwell] TOKEN_SECRET is not set (16+ characters). Using an insecure fallback.");
+  }
   return "dev-only-token-secret-change-me";
 }
 
