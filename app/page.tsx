@@ -56,23 +56,31 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
       <Header />
       <PageTracker />
       <main id="main">
-        <section className="mx-auto grid max-w-6xl gap-8 px-5 pt-8 pb-14 md:grid-cols-[1.1fr_0.9fr] lg:grid-cols-[1.35fr_0.85fr] md:items-center md:pt-16 md:pb-20">
-          <div>
-            <p className="text-xs font-semibold tracking-[0.2em] text-sage uppercase">Launching soon · {site.city}</p>
-            <h1 className="mt-4 font-serif text-[2.5rem] leading-[1.08] font-medium sm:text-5xl lg:whitespace-nowrap lg:text-[3.4rem]">
-              Be well. Look well. <em className="text-sage">Wed well.</em>
+        <section className="grid md:mx-auto md:max-w-6xl md:grid-cols-[1.1fr_0.9fr] md:grid-rows-[auto_auto] md:gap-x-8 md:px-5 md:pt-16 md:pb-20 lg:grid-cols-[1.35fr_0.85fr]">
+          <div className="relative [grid-area:1/1] h-[min(78svh,680px)] min-h-[480px] overflow-hidden bg-sand md:col-start-2 md:row-span-2 md:h-auto md:min-h-0 md:aspect-[4/5] md:self-center md:rounded-[2rem]">
+            <Image src="/hero-couple.jpg" alt="An Indian bride and groom embracing under a floral mandap" fill priority sizes="(min-width: 768px) 45vw, 100vw" className="object-cover object-[52%_40%]" />
+            <div aria-hidden className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent md:hidden" />
+          </div>
+          <div className="relative z-10 [grid-area:1/1] self-end px-5 pb-7 text-white md:col-start-1 md:row-start-1 md:px-0 md:pb-0 md:text-ink">
+            <p className="text-xs font-semibold tracking-[0.2em] text-white/85 uppercase md:text-sage">Launching soon · {site.city}</p>
+            <h1 className="mt-3 font-serif text-[2.6rem] leading-[1.05] font-medium sm:text-5xl md:mt-4 lg:whitespace-nowrap lg:text-[3.4rem]">
+              Be well. Look well. <em className="text-[#d7e8dc] md:text-sage">Wed well.</em>
             </h1>
-            <p className="mt-5 text-xl font-semibold text-ink">{headline[experiments.message]}</p>
-            <p className="mt-3 max-w-md text-lg leading-relaxed text-muted">
+            <p className="mt-3 text-lg font-semibold md:mt-5 md:text-xl">{headline[experiments.message]}</p>
+          </div>
+          <div className="px-5 pt-6 pb-12 md:col-start-1 md:row-start-2 md:px-0 md:pt-3 md:pb-0">
+            <p className="max-w-md text-lg leading-relaxed text-muted">
               A doctor-guided health and glow program for engaged couples. Begin 4–6 months before the wedding, so the glow on the day comes from real health, not last-minute fixes.
             </p>
-            <a href="#reserve" className="mt-7 inline-flex min-h-13 items-center rounded-full bg-sage px-8 text-base font-semibold text-white hover:bg-sage-dark">
+            <ul className="mt-6 grid grid-cols-3 gap-2 text-center text-xs font-semibold text-sage-dark md:hidden">
+              {["Doctor-guided", `${inr(site.depositInr)} refundable`, "Private & discreet"].map((t) => (
+                <li key={t} className="rounded-2xl bg-sage-soft px-2 py-3 leading-snug">{t}</li>
+              ))}
+            </ul>
+            <a href="#reserve" className="mt-7 hidden min-h-13 items-center rounded-full bg-sage px-8 text-base font-semibold text-white hover:bg-sage-dark md:inline-flex">
               Reserve your spot
             </a>
-            <p className="mt-3 text-sm text-muted">Founding members only · Refundable {inr(site.depositInr)} deposit</p>
-          </div>
-          <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-sand">
-            <Image src="/hero-couple.jpg" alt="An Indian bride and groom embracing under a floral mandap" fill priority sizes="(min-width: 768px) 45vw, 100vw" className="object-cover object-[52%_50%]" />
+            <p className="mt-3 hidden text-sm text-muted md:block">Founding members only · Refundable {inr(site.depositInr)} deposit</p>
           </div>
         </section>
 
