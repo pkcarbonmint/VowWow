@@ -2,20 +2,12 @@
 
 Get the AI chat feature running in **10 minutes**.
 
+⚠️ **Email verification is currently DISABLED** - Users can chat immediately without email/OTP. 
+Context is stored in browser localStorage only. Email auth will be re-enabled once AWS SES gets production access.
+
 ## Step 1: Get API Keys
 
-### AWS SES (Email OTP) - 15 minutes
-
-**See complete guide:** `AWS_SES_SETUP.md`
-
-Quick version:
-1. AWS Console → Search "SES" → Select Mumbai region
-2. Verify email: Verified identities → Create → Email address
-3. Create SMTP credentials: SMTP settings → Create credentials
-4. Save: Username, Password, Host (`email-smtp.ap-south-1.amazonaws.com`)
-5. Request production access (takes 24hrs approval)
-
-### Groq (AI Chat) - 2 minutes
+### Groq (AI Chat) - 2 minutes (REQUIRED)
 1. Visit https://console.groq.com/
 2. Sign up with email
 3. Click **Create API Key**
@@ -26,28 +18,25 @@ Quick version:
 Create/update `.env.local`:
 
 ```bash
-# Your existing TOKEN_SECRET (or add one, 16+ chars)
-TOKEN_SECRET=my-super-secret-token-change-this-to-something-random
-
-# AWS SES
-AWS_SES_SMTP_USERNAME=AKIAXXXXXXXXXX
-AWS_SES_SMTP_PASSWORD=your_smtp_password
-AWS_SES_SMTP_HOST=email-smtp.ap-south-1.amazonaws.com
-AWS_SES_SMTP_PORT=587
-AWS_SES_FROM_EMAIL=your-verified@email.com
-AWS_SES_FROM_NAME=WeddingWell
-
-# Groq
+# Required: Groq AI
 GROQ_API_KEY=gsk_paste_your_key_here
+
+# Optional: For testing (AWS SES - not needed right now)
+# AWS_SES_SMTP_USERNAME=AKIAXXXXXXXXXX
+# AWS_SES_SMTP_PASSWORD=your_smtp_password
+# AWS_SES_SMTP_HOST=email-smtp.ap-south-1.amazonaws.com
+# AWS_SES_SMTP_PORT=587
+# AWS_SES_FROM_EMAIL=your-verified@email.com
+# AWS_SES_FROM_NAME=WeddingWell
 ```
 
-## Step 3: Update Google Sheets (1 minute)
+## Step 3: Update Google Sheets (SKIP for now)
 
-Open your Google Sheet → **Leads** tab → Add column after `name`:
+~~Open your Google Sheet → **Leads** tab → Add column after `name`:~~
 
-| lead_id | name | **email** | whatsapp | wedding_month | ... |
+~~| lead_id | name | **email** | whatsapp | wedding_month | ... |~~
 
-That's it! Your existing Google Apps Script doesn't need changes.
+**Not needed right now** - email collection is disabled.
 
 ## Step 4: Test Setup (2 minutes)
 
@@ -100,16 +89,16 @@ You'll see:
 Add environment variables in Vercel:
 
 1. Vercel Dashboard → Your Project → Settings → Environment Variables
-2. Add:
-   - `TOKEN_SECRET`
+2. Add (required):
+   - `GROQ_API_KEY` (required for AI)
+   - `SECRET_TEST_KEY` (for testing endpoint)
+3. Optional (for when email is re-enabled):
    - `AWS_SES_SMTP_USERNAME`
    - `AWS_SES_SMTP_PASSWORD`
    - `AWS_SES_SMTP_HOST`
    - `AWS_SES_SMTP_PORT`
    - `AWS_SES_FROM_EMAIL`
    - `AWS_SES_FROM_NAME`
-   - `GROQ_API_KEY`
-   - `SECRET_TEST_KEY`
 3. Deploy:
 
 ```bash
@@ -123,9 +112,10 @@ Done! 🎉
 ## What Users See
 
 1. **New section on homepage:** "Get personalized advice"
-2. **Auth flow:** Email → OTP → Context (name, wedding, tier)
-3. **Chat interface:** 10 free questions/day about health/skincare
+2. **Simple flow:** Name → Wedding date → Tier → Chat starts immediately
+3. **Chat interface:** Unlimited questions about health/skincare (no rate limiting)
 4. **Smart responses:** Timeline-aware, Indian wedding-specific advice
+5. **No signup required:** Works immediately, data saved in browser
 
 ## What You Get
 
