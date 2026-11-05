@@ -2,16 +2,20 @@
 
 Get the AI chat feature running in **10 minutes**.
 
-## Step 1: Get API Keys (5 minutes)
+## Step 1: Get API Keys
 
-### ZeptoMail (Email OTP)
-1. Visit https://www.zoho.com/zeptomail/
-2. Sign up → Verify email
-3. Go to **Mail Agents** → Create agent
-4. Copy **Authorization token**
-5. Note **bounce address** (looks like: `noreply@bounce.zeptomail.in`)
+### AWS SES (Email OTP) - 15 minutes
 
-### Groq (AI Chat)
+**See complete guide:** `AWS_SES_SETUP.md`
+
+Quick version:
+1. AWS Console → Search "SES" → Select Mumbai region
+2. Verify email: Verified identities → Create → Email address
+3. Create SMTP credentials: SMTP settings → Create credentials
+4. Save: Username, Password, Host (`email-smtp.ap-south-1.amazonaws.com`)
+5. Request production access (takes 24hrs approval)
+
+### Groq (AI Chat) - 2 minutes
 1. Visit https://console.groq.com/
 2. Sign up with email
 3. Click **Create API Key**
@@ -25,9 +29,13 @@ Create/update `.env.local`:
 # Your existing TOKEN_SECRET (or add one, 16+ chars)
 TOKEN_SECRET=my-super-secret-token-change-this-to-something-random
 
-# ZeptoMail
-ZEPTOMAIL_TOKEN=paste_your_token_here
-ZEPTOMAIL_BOUNCE_ADDRESS=noreply@yourbounce.zeptomail.in
+# AWS SES
+AWS_SES_SMTP_USERNAME=AKIAXXXXXXXXXX
+AWS_SES_SMTP_PASSWORD=your_smtp_password
+AWS_SES_SMTP_HOST=email-smtp.ap-south-1.amazonaws.com
+AWS_SES_SMTP_PORT=587
+AWS_SES_FROM_EMAIL=your-verified@email.com
+AWS_SES_FROM_NAME=WeddingWell
 
 # Groq
 GROQ_API_KEY=gsk_paste_your_key_here
@@ -89,14 +97,19 @@ You'll see:
 
 ## Deploy to Production
 
-Add the same 3 environment variables in Vercel:
+Add environment variables in Vercel:
 
 1. Vercel Dashboard → Your Project → Settings → Environment Variables
 2. Add:
    - `TOKEN_SECRET`
-   - `ZEPTOMAIL_TOKEN`
-   - `ZEPTOMAIL_BOUNCE_ADDRESS`
+   - `AWS_SES_SMTP_USERNAME`
+   - `AWS_SES_SMTP_PASSWORD`
+   - `AWS_SES_SMTP_HOST`
+   - `AWS_SES_SMTP_PORT`
+   - `AWS_SES_FROM_EMAIL`
+   - `AWS_SES_FROM_NAME`
    - `GROQ_API_KEY`
+   - `SECRET_TEST_KEY`
 3. Deploy:
 
 ```bash
