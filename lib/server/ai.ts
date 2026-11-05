@@ -1,8 +1,6 @@
-import Groq from 'groq-sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY || ''
-});
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 export type ChatMessage = {
   role: 'user' | 'assistant';
@@ -43,11 +41,9 @@ function getPhase(days?: number): string {
 }
 
 export async function getAIResponse(context: AIContext): Promise<string> {
-  if (!process.env.GROQ_API_KEY) {
-    throw new Error('GROQ_API_KEY not configured');
+  if (!process.env.GEMINI_API_KEY) {
+    throw new Error('GEMINI_API_KEY not configured');
   }
-  
-  // Force fresh deployment
 
   const daysUntil = context.daysUntil ?? calculateDaysUntil(context.weddingMonth);
   const phase = context.phase ?? getPhase(daysUntil);
@@ -98,20 +94,30 @@ IMPORTANT RULES:
   ];
 
   try {
-    const completion = await groq.chat.completions.create({
-      messages,
-      model: 'llama-3.1-8b-instant', // Stable, fast, currently active
-      temperature: 0.7,
-      max_tokens: 300,
-      top_p: 1,
+    const model = genAI.getGenerativeModel({ 
+      model: 'gemini-1.5-flash',
+      generationConfig: {
+        temperature: 0.7,
+        maxOutputTokens: 300,
+      },
     });
 
-    const response = completion.choices[0]?.message?.content || 'Sorry, I had trouble processing that. Please try again.';
+    // Convert messages to Gemini format
+    const chat = model.startChat({
+      history: messages.slice(0, -1).map(msg => ({
+        role: msg.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: msg.content }],
+      })),
+    });
+
+    const result = await chat.sendMessage(messages[messages.length - 1].content);
+    const response = result.response.text();
+    
     return response.trim();
   } catch (error: any) {
-    console.error('[ai] Groq error:', error);
+    console.error('[ai] Gemini error:', error);
     
-    if (error.status === 429) {
+    if (error.message?.includes('429') || error.message?.includes('quota')) {
       throw new Error('AI service is busy. Please try again in a moment.');
     }
     
