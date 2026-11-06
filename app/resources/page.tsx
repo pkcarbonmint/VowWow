@@ -14,10 +14,11 @@ export const metadata = {
 export default async function ResourcesPage({
   searchParams,
 }: {
-  searchParams: { layout?: string };
+  searchParams: Promise<{ layout?: string }>;
 }) {
   const session = await auth();
-  const layout = searchParams.layout || 'original';
+  const params = await searchParams;
+  const layout = params.layout || 'original';
   
   const props = {
     userName: session?.user?.name,
