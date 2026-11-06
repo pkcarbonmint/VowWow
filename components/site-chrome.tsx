@@ -38,6 +38,7 @@ export function Footer() {
           </p>
         </div>
         <nav aria-label="Legal" className="flex flex-col gap-2">
+          <Link href="/terms" className="underline">Terms of Service</Link>
           <Link href="/privacy" className="underline">Privacy notice &amp; data requests</Link>
           <Link href="/refund" className="underline">Deposit &amp; refund policy</Link>
           <p className="mt-2 text-xs leading-relaxed">
