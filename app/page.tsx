@@ -8,6 +8,7 @@ import { areas, site } from "@/lib/config";
 import { goldPrice, headline } from "@/lib/experiments";
 import { visitorContext } from "@/lib/server/context";
 import { paymentsEnabled } from "@/lib/server/razorpay";
+import { auth } from "@/auth";
 
 const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
@@ -42,7 +43,7 @@ const faqs = [
 ];
 
 export default async function Home({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
-  const [{ experiments, source }, params] = await Promise.all([visitorContext(), searchParams]);
+  const [{ experiments, source }, params, session] = await Promise.all([visitorContext(), searchParams, auth()]);
   const now = new Date();
 
   const tiers: Tier[] = [
@@ -170,6 +171,9 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
               refundDays={site.refundDays}
               paymentsLive={paymentsEnabled()}
               depositReturned={params.deposit === "done"}
+              userEmail={session?.user?.email ?? undefined}
+              userName={session?.user?.name ?? undefined}
+              userId={session?.user?.id ?? undefined}
             />
           </div>
         </section>

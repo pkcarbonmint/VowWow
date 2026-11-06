@@ -45,8 +45,16 @@ export function SignupFlow(props: {
   refundDays: number;
   paymentsLive: boolean;
   depositReturned: boolean;
+  userEmail?: string;
+  userName?: string;
+  userId?: string;
 }) {
-  const [draft, setDraft] = useState<Draft>({ ...empty, referral: props.referral });
+  const [draft, setDraft] = useState<Draft>({ 
+    ...empty, 
+    referral: props.referral,
+    email: props.userEmail || "",
+    name: props.userName || "",
+  });
   const [stage, setStage] = useState<Stage>("interest");
   const [token, setToken] = useState("");
   const [done, setDone] = useState<Done | null>(null);
@@ -124,7 +132,12 @@ export function SignupFlow(props: {
       const res = await fetch("/api/lead", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...draft, website, startedAt: startedAt.current || Date.now() - 5000 }),
+        body: JSON.stringify({ 
+          ...draft, 
+          website, 
+          startedAt: startedAt.current || Date.now() - 5000,
+          googleUserId: props.userId,
+        }),
       });
       const json = (await res.json().catch(() => ({}))) as { token?: string; error?: string; field?: string };
       if (!res.ok || !json.token) {
@@ -310,13 +323,57 @@ export function SignupFlow(props: {
   return (
     <form onSubmit={submitInterest} noValidate className="space-y-5" aria-describedby={error ? "form-error" : undefined}>
       {errorBox}
+      {!props.userId && (
+        <div className="rounded-2xl bg-sage-soft border border-sage/20 p-4">
+          <p className="text-sm font-semibold text-sage-dark">💡 Sign in with Google to auto-fill</p>
+          <p className="mt-1 text-sm text-muted">
+            Your name and email will be filled automatically from your Google account.
+          </p>
+          <a 
+            href="/auth/signin" 
+            className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-sage hover:text-sage-dark"
+          >
+            Sign in with Google →
+          </a>
+        </div>
+      )}
       <div>
         <label htmlFor="f-name" className="text-sm font-semibold">Your name</label>
-        <input id="f-name" name="name" autoComplete="name" required value={draft.name} onChange={(e) => update("name", e.target.value)} aria-invalid={invalid("name")} aria-describedby={describedBy("name")} className={fieldClass} />
+        <input 
+          id="f-name" 
+          name="name" 
+          autoComplete="name" 
+          required 
+          value={draft.name} 
+          onChange={(e) => update("name", e.target.value)} 
+          aria-invalid={invalid("name")} 
+          aria-describedby={describedBy("name")} 
+          className={fieldClass}
+          disabled={!!props.userId}
+        />
+        {props.userId && (
+          <p className="mt-1 text-xs text-muted">✓ From your Google account</p>
+        )}
       </div>
       <div>
         <label htmlFor="f-email" className="text-sm font-semibold">Email address</label>
-        <input id="f-email" name="email" type="email" autoComplete="email" required value={draft.email} onChange={(e) => update("email", e.target.value)} aria-invalid={invalid("email")} aria-describedby={describedBy("email")} placeholder="you@example.com" className={fieldClass} />
+        <input 
+          id="f-email" 
+          name="email" 
+          type="email" 
+          autoComplete="email" 
+          required 
+          value={draft.email} 
+          onChange={(e) => update("email", e.target.value)} 
+          aria-invalid={invalid("email")} 
+          aria-describedby={describedBy("email")} 
+          placeholder="you@example.com" 
+          className={fieldClass}
+          disabled={!!props.userId}
+        />
+        {props.userId && (
+          <p className="mt-1 text-xs text-muted">✓ From your Google account</p>
+        )}
       </div>
       <div>
         <label htmlFor="f-whatsapp" className="text-sm font-semibold">WhatsApp number</label>

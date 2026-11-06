@@ -133,6 +133,33 @@ When a user signs in with Google OAuth, we store:
 
 This data is stored in the session only and is not persisted to a database by default.
 
+## Integration with Interest Form
+
+Google OAuth is now integrated with the interest form:
+
+### When User is NOT Signed In:
+- Form displays a banner: "Sign in with Google to auto-fill"
+- User can still fill the form manually
+- Form submission is anonymous (no Google User ID linked)
+
+### When User IS Signed In:
+- Name and Email fields are **auto-filled** from Google account
+- Fields are **disabled** (cannot be edited) with "✓ From your Google account" label
+- Form submission includes the `google_user_id` in the spreadsheet
+- This allows you to link form submissions to user accounts
+
+### Data Flow:
+1. User signs in with Google → Session created with user info
+2. User visits homepage → Form auto-fills name/email from session
+3. User submits form → Backend saves `google_user_id` to "Leads" sheet
+4. Later you can identify which form submissions came from authenticated users
+
+### Benefits:
+- **Data accuracy**: Name/email match Google account (verified)
+- **User tracking**: Link multiple interactions to same user
+- **Anti-spam**: Authenticated users are more trustworthy
+- **Better UX**: Less typing for signed-in users
+
 ## Next Steps
 
 To persist user data to a database, you'll need to:
