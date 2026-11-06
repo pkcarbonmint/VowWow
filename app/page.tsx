@@ -4,6 +4,7 @@ import { SignupFlow } from "@/components/signup-flow";
 import { Footer, Header } from "@/components/site-chrome";
 import { StickyCta } from "@/components/sticky-cta";
 import { TierCards, type Tier } from "@/components/tier-cards";
+import { AiChat } from "@/components/ai-chat";
 import { areas, site } from "@/lib/config";
 import { goldPrice, headline } from "@/lib/experiments";
 import { visitorContext } from "@/lib/server/context";
@@ -154,6 +155,21 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
                 </details>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section id="ai-chat" className="py-16">
+          <div className="mx-auto max-w-3xl px-5">
+            <div className="text-center mb-8">
+              <h2 className="font-serif text-4xl font-medium">Get personalized advice</h2>
+              <p className="mt-3 text-muted">
+                Free AI assistant for health, skincare, and wellness planning
+              </p>
+            </div>
+            <AiChat />
+            <p className="mt-4 text-center text-xs text-muted">
+              💡 I specialize in skincare, health, nutrition, fitness, and beauty timelines. For wedding planning (venues, outfits), check TheKnot or WedMeGood.
+            </p>
           </div>
         </section>
 
