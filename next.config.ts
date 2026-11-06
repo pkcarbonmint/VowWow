@@ -11,6 +11,15 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   allowedDevOrigins: ["127.0.0.1"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.googleusercontent.com',
+        pathname: '**',
+      },
+    ],
+  },
   turbopack: {
     rules: {
       "*.css": {

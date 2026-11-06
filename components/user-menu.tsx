@@ -17,19 +17,24 @@ export async function UserMenu() {
 
   return (
     <div className="flex items-center gap-3">
-      <div className="text-right hidden sm:block">
-        <p className="text-sm font-semibold">{session.user.name}</p>
-        <p className="text-xs text-muted">{session.user.email}</p>
-      </div>
-      {session.user.image && (
+      {session.user.image ? (
         <Image
           src={session.user.image}
           alt={session.user.name || "User"}
           width={40}
           height={40}
-          className="rounded-full"
+          className="rounded-full border-2 border-sage/20"
+          unoptimized
         />
+      ) : (
+        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-sage text-white font-semibold text-sm">
+          {session.user.name?.charAt(0).toUpperCase() || "U"}
+        </div>
       )}
+      <div className="text-left hidden sm:block max-w-[200px]">
+        <p className="text-sm font-semibold truncate">{session.user.name}</p>
+        <p className="text-xs text-muted truncate">{session.user.email}</p>
+      </div>
       <form
         action={async () => {
           "use server"
@@ -38,7 +43,7 @@ export async function UserMenu() {
       >
         <button
           type="submit"
-          className="text-sm font-semibold text-sage hover:text-sage-dark transition-colors"
+          className="text-sm font-semibold text-sage hover:text-sage-dark transition-colors whitespace-nowrap"
         >
           Sign out
         </button>
