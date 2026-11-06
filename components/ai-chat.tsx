@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 type Message = {
   role: 'user' | 'assistant';
@@ -245,8 +246,8 @@ export function AiChat() {
                   {msg.role === 'user' ? (
                     <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
                   ) : (
-                    <div className="text-sm leading-relaxed prose prose-sm max-w-none prose-headings:font-semibold prose-headings:text-ink prose-p:my-2 prose-ul:my-2 prose-li:my-0 prose-strong:font-semibold prose-strong:text-ink">
-                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    <div className="text-sm leading-relaxed prose prose-sm max-w-none prose-headings:font-semibold prose-headings:text-ink prose-p:my-2 prose-ul:my-2 prose-li:my-0 prose-strong:font-semibold prose-strong:text-ink prose-table:border-collapse prose-table:w-full prose-th:border prose-th:border-ink/20 prose-th:bg-sage/10 prose-th:px-3 prose-th:py-2 prose-th:text-left prose-td:border prose-td:border-ink/20 prose-td:px-3 prose-td:py-2">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
                     </div>
                   )}
                 </div>
