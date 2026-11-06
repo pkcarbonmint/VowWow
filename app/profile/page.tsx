@@ -42,8 +42,8 @@ export default async function ProfilePage() {
                   <dd className="font-mono text-xs">{session.user.id}</dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-muted">Email Verified:</dt>
-                  <dd>{session.user.emailVerified ? "✅ Yes" : "⏳ Pending"}</dd>
+                  <dt className="text-muted">Email:</dt>
+                  <dd>{session.user.email}</dd>
                 </div>
                 <div className="flex justify-between">
                   <dt className="text-muted">Account Type:</dt>
