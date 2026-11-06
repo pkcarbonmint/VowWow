@@ -15,6 +15,31 @@ type Context = {
 
 const CONTEXT_KEY = 'ww_ai_context';
 const MESSAGES_KEY = 'ww_ai_messages';
+const FORM_CONTEXT_KEY = 'ww:draft'; // Same key as signup form
+
+// Simple markdown to text converter
+function stripMarkdown(text: string): string {
+  return text
+    // Remove bold **text** or __text__
+    .replace(/\*\*(.+?)\*\*/g, '$1')
+    .replace(/__(.+?)__/g, '$1')
+    // Remove italic *text* or _text_
+    .replace(/\*(.+?)\*/g, '$1')
+    .replace(/_(.+?)_/g, '$1')
+    // Remove headers # ## ###
+    .replace(/^#{1,6}\s+/gm, '')
+    // Remove bullet points and list markers
+    .replace(/^\s*[-*+]\s+/gm, '• ')
+    .replace(/^\s*\d+\.\s+/gm, '')
+    // Remove links [text](url) -> text
+    .replace(/\[(.+?)\]\(.+?\)/g, '$1')
+    // Remove code blocks ```code```
+    .replace(/```[\s\S]*?```/g, '')
+    .replace(/`(.+?)`/g, '$1')
+    // Clean up extra whitespace
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
 
 export function AiChat() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -28,10 +53,29 @@ export function AiChat() {
   // Load context and messages from localStorage
   useEffect(() => {
     try {
+      // Check if user has already filled the signup form
+      const formDraft = localStorage.getItem(FORM_CONTEXT_KEY);
+      let initialContext: Context = {};
+      
+      if (formDraft) {
+        const draft = JSON.parse(formDraft);
+        initialContext = {
+          name: draft.name || undefined,
+          weddingMonth: draft.weddingMonth || undefined,
+          tier: draft.tier || undefined,
+        };
+      }
+      
+      // Check for saved AI context (overrides form data if exists)
       const savedContext = localStorage.getItem(CONTEXT_KEY);
       if (savedContext) {
-        setContext(JSON.parse(savedContext));
-      } else {
+        initialContext = { ...initialContext, ...JSON.parse(savedContext) };
+      }
+      
+      setContext(initialContext);
+      
+      // Only show context form if we don't have name from either source
+      if (!initialContext.name) {
         setShowContext(true);
       }
 
@@ -98,8 +142,9 @@ export function AiChat() {
         throw new Error(data.error || 'Failed to get response');
       }
 
-      // Add assistant message
-      setMessages([...newMessages, { role: 'assistant', content: data.response }]);
+      // Add assistant message (strip markdown formatting)
+      const cleanResponse = stripMarkdown(data.response);
+      setMessages([...newMessages, { role: 'assistant', content: cleanResponse }]);
     } catch (err: any) {
       setError(err.message || 'Something went wrong. Please try again.');
       // Remove the user message if failed
@@ -117,11 +162,17 @@ export function AiChat() {
   };
 
   if (showContext) {
+    const hasFormData = context.name || context.weddingMonth || context.tier;
+    
     return (
       <div className="mx-auto max-w-2xl rounded-3xl border border-line bg-white p-8 shadow-sm">
-        <h3 className="font-serif text-2xl font-medium">Tell me about yourself</h3>
+        <h3 className="font-serif text-2xl font-medium">
+          {hasFormData ? 'Confirm your details' : 'Tell me about yourself'}
+        </h3>
         <p className="mt-2 text-sm text-muted">
-          This helps me give you personalized advice (optional, stored locally)
+          {hasFormData 
+            ? 'We found your info from the reservation form. Update if needed.' 
+            : 'This helps me give you personalized advice (optional, stored locally)'}
         </p>
 
         <div className="mt-6 space-y-4">
@@ -141,7 +192,7 @@ export function AiChat() {
 
           <div>
             <label htmlFor="weddingMonth" className="block text-sm font-semibold">
-              Wedding month (optional)
+              Wedding month {context.weddingMonth && '(from your form)'}
             </label>
             <input
               id="weddingMonth"
@@ -154,7 +205,7 @@ export function AiChat() {
 
           <div>
             <label htmlFor="tier" className="block text-sm font-semibold">
-              Interested in (optional)
+              Interested in {context.tier && '(from your form)'}
             </label>
             <select
               id="tier"
@@ -175,7 +226,7 @@ export function AiChat() {
             onClick={saveContext}
             className="flex-1 rounded-full bg-sage px-6 py-3 font-semibold text-white hover:bg-sage-dark"
           >
-            Start chatting
+            {hasFormData ? 'Continue' : 'Start chatting'}
           </button>
           <button
             onClick={() => setShowContext(false)}
