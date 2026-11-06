@@ -9,7 +9,7 @@ const Groq = require('groq-sdk');
 
 // Configuration
 const GROQ_API_KEY = process.env.GROQ_API_KEY || '';
-const MODEL = 'llama-3.1-8b-instant'; // Using the smaller, faster model
+const MODEL = 'openai/gpt-oss-120b'; // Available model on Groq (Nov 2026)
 
 // Test context for WeddingWell
 const testContext = {
