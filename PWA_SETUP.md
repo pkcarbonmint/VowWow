@@ -14,21 +14,9 @@ This document explains how to complete the PWA and push notification setup for V
 
 ## What's Still Needed
 
-### 1. Generate VAPID Keys
+### 1. ✅ Generate VAPID Keys (DONE)
 
-VAPID keys are required for web push notifications. Generate them using:
-
-```bash
-npx web-push generate-vapid-keys
-```
-
-This will output:
-```
-Public Key: BH...
-Private Key: ...
-```
-
-Add these to your `.env.local` and Vercel environment variables:
+VAPID keys are required for web push notifications. You've already added these to Vercel:
 
 ```env
 NEXT_PUBLIC_VAPID_PUBLIC_KEY=BH...
@@ -36,6 +24,16 @@ VAPID_PUBLIC_KEY=BH...
 VAPID_PRIVATE_KEY=...
 VAPID_SUBJECT=mailto:your-email@example.com
 ```
+
+### 1b. Add CRON_SECRET (Required)
+
+Add one more environment variable to Vercel for cron job security:
+
+```env
+CRON_SECRET=any-random-secret-string-here
+```
+
+This prevents unauthorized access to the cron endpoint.
 
 ### 2. Create Proper App Icons
 
@@ -53,46 +51,29 @@ You can use the SVG in `/app/icon.svg` as a starting point and convert it to PNG
 - Figma / Adobe Illustrator
 - ImageMagick: `convert -density 192 -background none icon.svg icon-192.png`
 
-### 3. Set Up Push Notification Scheduler
+### 3. ✅ Push Notification Scheduler (DONE)
 
-To send daily notifications at 7am, set up a Vercel Cron Job:
+The cron job is set up and will run automatically on Vercel:
 
-Create `/app/api/cron/daily-tips/route.ts`:
+**Files created:**
+- ✅ `/app/api/cron/daily-tips/route.ts` - Cron endpoint
+- ✅ `/lib/daily-tips.ts` - Tip generation logic
+- ✅ `/vercel.json` - Cron schedule configuration
 
-```typescript
-import { NextResponse } from "next/server";
-// Import push sending logic
+**Schedule:** 1:30 AM UTC = 7:00 AM IST (every day)
 
-export async function GET(request: Request) {
-  // Verify cron secret
-  const authHeader = request.headers.get("authorization");
-  if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+**Current status:** 
+- Cron infrastructure is ready
+- 80+ tips across 4 phases (Reset, Build, Refine, Maintain)
+- Personalized by name and days until wedding
+- TODO: Connect to your sheets/database to fetch subscriptions
 
-  // 1. Fetch all active push subscriptions from Events sheet
-  // 2. For each subscription, calculate days until wedding
-  // 3. Generate personalized tip based on phase
-  // 4. Send push notification using /api/push/send
-
-  return NextResponse.json({ success: true, sent: 0 });
-}
+**Testing the cron:**
+You can manually trigger it with:
+```bash
+curl -X POST https://your-domain.vercel.app/api/cron/daily-tips \
+  -H "Authorization: Bearer YOUR_CRON_SECRET"
 ```
-
-Then add to `vercel.json`:
-
-```json
-{
-  "crons": [
-    {
-      "path": "/api/cron/daily-tips",
-      "schedule": "0 1 * * *"
-    }
-  ]
-}
-```
-
-(1:30 UTC = 7:00 AM IST)
 
 ### 4. Testing Push Notifications Locally
 
