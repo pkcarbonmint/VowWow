@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { redirect } from "next/navigation";
 import { PageTracker } from "@/components/page-tracker";
 import { SignupFlow } from "@/components/signup-flow";
 import { Footer, Header } from "@/components/site-chrome";
@@ -45,6 +46,12 @@ const faqs = [
 
 export default async function Home({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const [{ experiments, source }, params, session] = await Promise.all([visitorContext(), searchParams, auth()]);
+  
+  // Redirect logged-in users to their resources hub
+  if (session?.user) {
+    redirect('/resources');
+  }
+  
   const now = new Date();
 
   const tiers: Tier[] = [
