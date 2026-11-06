@@ -16,7 +16,6 @@ export function Header() {
           </Link>
           <UserMenu />
         </div>
-        <span className="text-xs font-semibold tracking-widest text-sage uppercase md:hidden">Launching soon</span>
       </div>
     </header>
   );
