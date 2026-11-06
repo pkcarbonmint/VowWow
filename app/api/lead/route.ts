@@ -40,6 +40,7 @@ export async function POST(request: Request) {
     role: lead.role,
     referral,
     qualified,
+    google_user_id: lead.googleUserId || "",
     consent_whatsapp_privacy: true,
     consent_at: new Date().toISOString(),
     visitor_id: experiments.vid,

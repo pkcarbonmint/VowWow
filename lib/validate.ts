@@ -26,6 +26,7 @@ export type LeadInput = {
   tier: TierId;
   role: string;
   referral: string;
+  googleUserId?: string;
 };
 
 export type ParseResult = { ok: true; lead: LeadInput } | { ok: false; field: string; error: string };
@@ -67,7 +68,9 @@ export function parseLead(body: Record<string, unknown>, now = new Date()): Pars
     return { ok: false, field: "consent", error: "Please tick the box so we can contact you on WhatsApp." };
   }
 
-  return { ok: true, lead: { name, email, whatsapp, weddingMonth, area, tier, role, referral: str("referral").slice(0, 40) } };
+  const googleUserId = typeof body.googleUserId === "string" ? body.googleUserId : undefined;
+  
+  return { ok: true, lead: { name, email, whatsapp, weddingMonth, area, tier, role, referral: str("referral").slice(0, 40), googleUserId } };
 }
 
 /** Qualified = wedding 3+ months away, inside the launch area, WhatsApp consent given. */
