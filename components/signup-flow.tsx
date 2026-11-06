@@ -224,6 +224,14 @@ export function SignupFlow(props: {
                 : "We'll message you on WhatsApp when founding spots open. No spam, and you can opt out any time."}
         </p>
         <p className="mt-3 text-sm text-muted">A WhatsApp confirmation usually arrives within 5 minutes.</p>
+        <div className="mt-6">
+          <a
+            href="/welcome"
+            className="block w-full rounded-full bg-sage px-6 py-3 text-center font-semibold text-white hover:bg-sage-dark transition-colors"
+          >
+            Continue to Your Wellness Hub →
+          </a>
+        </div>
       </div>
     );
   }

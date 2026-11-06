@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import Script from "next/script";
 import { siteUrl } from "@/lib/config";
+import { PWAProvider } from "@/components/pwa-provider";
 import "./globals.css";
 
 const display = Cormorant_Garamond({ subsets: ["latin"], weight: ["500", "600"], style: ["normal", "italic"], variable: "--font-display" });
@@ -27,11 +28,19 @@ const gtagId = GA || ADS;
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en-IN" className={`${display.variable} ${body.variable}`}>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="VowWow" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+      </head>
       <body className="font-sans antialiased">
-        <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-full focus:bg-paper focus:px-4 focus:py-2">
-          Skip to content
-        </a>
-        {children}
+        <PWAProvider>
+          <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-full focus:bg-paper focus:px-4 focus:py-2">
+            Skip to content
+          </a>
+          {children}
         {gtagId && /^(G|AW)-[A-Z0-9]+$/.test(gtagId) ? (
           <>
             <Script src={`https://www.googletagmanager.com/gtag/js?id=${gtagId}`} strategy="afterInteractive" />
@@ -45,6 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {`!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${PIXEL}');fbq('track','PageView');`}
           </Script>
         ) : null}
+        </PWAProvider>
       </body>
     </html>
   );
