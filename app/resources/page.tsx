@@ -18,7 +18,7 @@ export default async function ResourcesPage({
 }) {
   const session = await auth();
   const params = await searchParams;
-  const layout = params.layout || 'original';
+  const layout = params.layout || 'sidebar'; // Changed default to sidebar
   
   const props = {
     userName: session?.user?.name,

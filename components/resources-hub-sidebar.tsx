@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AiChat } from "./ai-chat";
+import { AiChatFullscreen } from "./ai-chat-fullscreen";
 import { WeddingTimeline } from "./wedding-timeline";
 import { GuidesLibrary } from "./guides-library";
 
@@ -70,16 +70,10 @@ export function ResourcesHubSidebar({ userName, userEmail }: ResourcesHubProps) 
       </div>
 
       {/* Main Content Area - Full Height */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden bg-white">
         {activeTab === 'chat' && (
-          <div className="h-full flex flex-col">
-            <div className="border-b border-line bg-white px-6 py-4">
-              <h2 className="text-lg font-semibold text-ink">Chat with AI</h2>
-              <p className="text-sm text-muted">Ask about skincare, fitness, and wellness</p>
-            </div>
-            <div className="flex-1 overflow-auto px-6 py-4">
-              <AiChat />
-            </div>
+          <div className="h-full">
+            <AiChatFullscreen />
           </div>
         )}
         
