@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
+import ReactMarkdown from 'react-markdown';
 
 type Message = {
   role: 'user' | 'assistant';
@@ -16,30 +17,6 @@ type Context = {
 const CONTEXT_KEY = 'ww_ai_context';
 const MESSAGES_KEY = 'ww_ai_messages';
 const FORM_CONTEXT_KEY = 'ww:draft'; // Same key as signup form
-
-// Simple markdown to text converter
-function stripMarkdown(text: string): string {
-  return text
-    // Remove bold **text** or __text__
-    .replace(/\*\*(.+?)\*\*/g, '$1')
-    .replace(/__(.+?)__/g, '$1')
-    // Remove italic *text* or _text_
-    .replace(/\*(.+?)\*/g, '$1')
-    .replace(/_(.+?)_/g, '$1')
-    // Remove headers # ## ###
-    .replace(/^#{1,6}\s+/gm, '')
-    // Remove bullet points and list markers
-    .replace(/^\s*[-*+]\s+/gm, '• ')
-    .replace(/^\s*\d+\.\s+/gm, '')
-    // Remove links [text](url) -> text
-    .replace(/\[(.+?)\]\(.+?\)/g, '$1')
-    // Remove code blocks ```code```
-    .replace(/```[\s\S]*?```/g, '')
-    .replace(/`(.+?)`/g, '$1')
-    // Clean up extra whitespace
-    .replace(/\n{3,}/g, '\n\n')
-    .trim();
-}
 
 export function AiChat() {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -142,9 +119,8 @@ export function AiChat() {
         throw new Error(data.error || 'Failed to get response');
       }
 
-      // Add assistant message (strip markdown formatting)
-      const cleanResponse = stripMarkdown(data.response);
-      setMessages([...newMessages, { role: 'assistant', content: cleanResponse }]);
+      // Add assistant message
+      setMessages([...newMessages, { role: 'assistant', content: data.response }]);
     } catch (err: any) {
       setError(err.message || 'Something went wrong. Please try again.');
       // Remove the user message if failed
@@ -266,7 +242,13 @@ export function AiChat() {
                       : 'bg-sand text-ink'
                   }`}
                 >
-                  <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                  {msg.role === 'user' ? (
+                    <p className="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                  ) : (
+                    <div className="text-sm leading-relaxed prose prose-sm max-w-none prose-headings:font-semibold prose-headings:text-ink prose-p:my-2 prose-ul:my-2 prose-li:my-0 prose-strong:font-semibold prose-strong:text-ink">
+                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    </div>
+                  )}
                 </div>
               </div>
             ))
