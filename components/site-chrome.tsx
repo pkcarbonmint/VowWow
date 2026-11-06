@@ -1,17 +1,21 @@
 import Link from "next/link";
 import { site } from "@/lib/config";
 import { Wordmark } from "./brand";
+import { UserMenu } from "./user-menu";
 
 export function Header() {
   return (
     <header className="sticky top-0 z-30 border-b border-line/70 bg-ivory/90 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-5">
         <Link href="/" aria-label="WeddingWell home">
           <Wordmark className="text-2xl" />
         </Link>
-        <Link href="/#reserve" className="hidden min-h-11 items-center rounded-full bg-sage px-5 text-sm font-semibold text-white hover:bg-sage-dark md:inline-flex">
-          Reserve your spot
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/#reserve" className="hidden min-h-11 items-center rounded-full bg-sage px-5 text-sm font-semibold text-white hover:bg-sage-dark md:inline-flex">
+            Reserve your spot
+          </Link>
+          <UserMenu />
+        </div>
         <span className="text-xs font-semibold tracking-widest text-sage uppercase md:hidden">Launching soon</span>
       </div>
     </header>
