@@ -110,7 +110,7 @@ export function AiChatFullscreen() {
     <div className="flex h-full flex-col">
       {/* Messages Area - ChatGPT Style */}
       <div className="flex-1 overflow-y-auto">
-        <div className="mx-auto max-w-3xl px-4 py-6">
+        <div className="mx-auto max-w-3xl px-3 md:px-4 py-4 md:py-6">
           {messages.length === 0 ? (
             <div className="flex h-full items-center justify-center">
               <div className="text-center">
@@ -127,23 +127,23 @@ export function AiChatFullscreen() {
             <div className="space-y-6">
               {messages.map((msg, idx) => (
                 <div key={idx} className="group">
-                  <div className="flex gap-4">
+                  <div className="flex gap-3 md:gap-4">
                     {/* Avatar */}
                     <div className="shrink-0">
-                      <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${
+                      <div className={`flex h-7 w-7 md:h-8 md:w-8 items-center justify-center rounded-lg ${
                         msg.role === 'user' 
                           ? 'bg-sage/20 text-sage' 
                           : 'bg-ink/5 text-ink'
                       }`}>
-                        <span className="text-sm font-semibold">
+                        <span className="text-xs md:text-sm font-semibold">
                           {msg.role === 'user' ? (context.name?.[0] || 'Y') : 'AI'}
                         </span>
                       </div>
                     </div>
                     
                     {/* Message Content */}
-                    <div className="flex-1 space-y-2">
-                      <div className="text-sm font-semibold text-ink">
+                    <div className="flex-1 space-y-1 md:space-y-2 min-w-0">
+                      <div className="text-xs md:text-sm font-semibold text-ink">
                         {msg.role === 'user' ? (context.name || 'You') : 'VowWow AI'}
                       </div>
                       <div className="text-sm text-ink">
@@ -197,8 +197,8 @@ export function AiChatFullscreen() {
 
       {/* Sticky Input - ChatGPT Style */}
       <div className="border-t border-line bg-white">
-        <div className="mx-auto max-w-3xl px-4 py-4">
-          <div className="flex gap-3">
+        <div className="mx-auto max-w-3xl px-3 md:px-4 py-3 md:py-4">
+          <div className="flex gap-2 md:gap-3">
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -206,13 +206,13 @@ export function AiChatFullscreen() {
               placeholder="Ask about skincare, health, fitness..."
               maxLength={300}
               rows={1}
-              className="flex-1 resize-none rounded-2xl border border-line bg-white px-4 py-3 text-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/25"
-              style={{ minHeight: '48px', maxHeight: '200px' }}
+              className="flex-1 resize-none rounded-2xl border border-line bg-white px-3 md:px-4 py-2.5 md:py-3 text-sm focus:border-sage focus:outline-none focus:ring-2 focus:ring-sage/25"
+              style={{ minHeight: '44px', maxHeight: '200px' }}
             />
             <button
               onClick={sendMessage}
               disabled={!input.trim() || loading}
-              className="shrink-0 rounded-xl bg-sage px-4 py-3 text-white hover:bg-sage-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="shrink-0 rounded-xl bg-sage px-3 md:px-4 py-2.5 md:py-3 text-white hover:bg-sage-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               title="Send message"
             >
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
