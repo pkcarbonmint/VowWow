@@ -67,7 +67,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<Rec
       <main id="main">
         <section className="grid md:mx-auto md:max-w-7xl md:grid-cols-[1.1fr_0.9fr] md:grid-rows-[auto_auto] md:gap-x-12 md:px-6 md:pt-20 md:pb-24 lg:grid-cols-[1.35fr_0.85fr]">
           <div className="relative [grid-area:1/1] h-[min(78svh,680px)] min-h-[480px] overflow-hidden bg-sand md:col-start-2 md:row-span-2 md:h-auto md:min-h-0 md:aspect-[4/5] md:self-center md:rounded-[2.5rem] md:shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
-            <Image src="/hero-couple.jpg" alt="An Indian bride and groom embracing under a floral mandap" fill priority sizes="(min-width: 768px) 45vw, 100vw" className="object-cover object-[52%_40%]" />
+            <Image src="/hero-couple.jpg" alt="An Indian bride and groom embracing under a floral mandap" fill priority sizes="(min-width: 768px) 45vw, 100vw" className="object-cover object-[52%_25%]" />
             <div aria-hidden className="hero-gradient absolute inset-0 md:hidden" />
           </div>
           <div className="relative z-10 [grid-area:1/1] self-end px-5 pb-8 text-white md:col-start-1 md:row-start-1 md:px-0 md:pb-0 md:text-ink animate-fade-in">
