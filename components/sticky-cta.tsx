@@ -19,13 +19,13 @@ export function StickyCta() {
   return (
     <div
       aria-hidden={hidden}
-      className={`fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ivory/95 px-4 pt-3 backdrop-blur transition-transform duration-200 md:hidden ${hidden ? "translate-y-full" : ""}`}
-      style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
+      className={`fixed inset-x-0 bottom-0 z-40 border-t border-sage-soft/70 bg-ivory/98 px-4 pt-4 backdrop-blur-lg shadow-[0_-10px_30px_rgba(0,0,0,0.1)] transition-transform duration-300 md:hidden ${hidden ? "translate-y-full" : ""}`}
+      style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
     >
       <a
         href="#reserve"
         tabIndex={hidden ? -1 : 0}
-        className="flex min-h-12 w-full items-center justify-center rounded-full bg-sage text-base font-semibold text-white active:bg-sage-dark"
+        className="flex min-h-14 w-full items-center justify-center rounded-full bg-gradient-to-r from-sage to-sage-bright text-base font-bold text-white active:scale-95 transition-transform duration-200 shadow-lg"
       >
         Reserve your spot
       </a>
