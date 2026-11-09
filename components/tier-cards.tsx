@@ -20,26 +20,28 @@ export function TierCards({ tiers }: { tiers: Tier[] }) {
   };
 
   return (
-    <div className="mt-8 grid gap-4 md:grid-cols-3 md:items-stretch">
-      {tiers.map((tier) => (
+    <div className="mt-12 grid gap-6 md:grid-cols-3 md:items-stretch">
+      {tiers.map((tier, i) => (
         <article
           key={tier.id}
-          className={`relative flex flex-col rounded-3xl border p-6 ${
-            tier.featured ? "border-sage bg-paper shadow-[0_18px_40px_-28px_rgba(63,95,79,0.8)]" : "border-line bg-paper/70"
+          className={`relative flex flex-col rounded-3xl border p-8 card-hover animate-on-scroll${i > 0 ? `-delay-${Math.min(i, 2)}` : ''} ${
+            tier.featured 
+              ? "border-sage-bright bg-gradient-to-br from-white to-sage-soft/50 shadow-[0_20px_60px_rgba(45,102,83,0.2)] scale-105" 
+              : "border-sage-soft bg-gradient-to-br from-white to-paper shadow-[0_12px_40px_rgba(0,0,0,0.06)]"
           }`}
         >
           {tier.featured ? (
-            <span className="absolute -top-3 left-6 rounded-full bg-sage px-3 py-1 text-xs font-semibold tracking-wide text-white">
+            <span className="absolute -top-4 left-8 rounded-full bg-gradient-to-r from-sage to-sage-bright px-4 py-1.5 text-xs font-bold tracking-wide text-white shadow-lg">
               Most chosen
             </span>
           ) : null}
-          <h3 className="font-serif text-3xl">{tier.name}</h3>
-          <p className="mt-1 text-lg font-semibold">{tier.price}</p>
-          <p className="text-xs text-muted">Indicative price</p>
-          <ul className="mt-5 flex-1 space-y-2 text-[0.95rem] leading-relaxed text-muted">
+          <h3 className="font-serif text-4xl font-bold text-ink">{tier.name}</h3>
+          <p className="mt-2 text-xl font-bold text-sage-dark">{tier.price}</p>
+          <p className="text-xs text-muted font-semibold uppercase tracking-wide">Indicative price</p>
+          <ul className="mt-7 flex-1 space-y-3 text-[15px] leading-relaxed text-muted">
             {tier.items.map((item) => (
-              <li key={item} className="flex gap-2">
-                <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-full bg-sage" />
+              <li key={item} className="flex gap-3">
+                <span aria-hidden className="mt-2 size-2 shrink-0 rounded-full bg-gradient-to-br from-sage to-sage-bright" />
                 {item}
               </li>
             ))}
@@ -47,8 +49,10 @@ export function TierCards({ tiers }: { tiers: Tier[] }) {
           <button
             type="button"
             onClick={() => choose(tier.id)}
-            className={`mt-6 min-h-12 rounded-full px-5 font-semibold ${
-              tier.featured ? "bg-sage text-white hover:bg-sage-dark" : "border border-sage text-sage hover:bg-sage-soft"
+            className={`mt-8 min-h-13 rounded-full px-6 font-bold transition-all duration-300 ${
+              tier.featured 
+                ? "bg-gradient-to-r from-sage to-sage-bright text-white hover:shadow-xl hover:scale-[1.02]" 
+                : "border-2 border-sage-bright text-sage-bright hover:bg-sage-bright hover:text-white"
             }`}
           >
             I&apos;m interested in {tier.name}
